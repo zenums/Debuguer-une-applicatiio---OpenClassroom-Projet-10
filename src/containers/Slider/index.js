@@ -13,8 +13,6 @@ const Slider = () => {
     .slice()
     .sort((evtA, evtB) => (new Date(evtA.date) > new Date(evtB.date) ? -1 : 1));
 
-  console.log("byDateDesc", byDateDesc);
-
   // Fonction pour passer à la carte suivante
   useEffect(() => {
     const interval = setInterval(() => {
@@ -54,6 +52,7 @@ const Slider = () => {
               type="radio"
               name="radio-button"
               checked={index === radioIdx}
+              readOnly
             />
           ))}
         </div>
