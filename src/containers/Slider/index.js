@@ -7,21 +7,26 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
-  ); // four error here
 
-  const nextCard = () => {
-    setTimeout(() => {
+  // Cloner et trier les données sans modifier l'état original
+  const byDateDesc = data?.focus
+    .slice()
+    .sort((evtA, evtB) => (new Date(evtA.date) > new Date(evtB.date) ? -1 : 1));
+
+  console.log("byDateDesc", byDateDesc);
+
+  // Fonction pour passer à la carte suivante
+  useEffect(() => {
+    const interval = setInterval(() => {
       if (byDateDesc?.length) {
         setIndex((prevIndex) => (prevIndex + 1) % byDateDesc.length);
       }
     }, 5000);
-  };
 
-  useEffect(() => {
-    nextCard();
-  });
+    // Nettoyer l'intervalle à la fin
+    return () => clearInterval(interval);
+  }, [byDateDesc]);
+
   return (
     <div className="SlideCardList">
       {byDateDesc?.map((event, idx) => (
@@ -48,7 +53,7 @@ const Slider = () => {
               key={`${_.title}-radio`}
               type="radio"
               name="radio-button"
-              checked={index === radioIdx} // five error here and six error
+              checked={index === radioIdx}
             />
           ))}
         </div>
